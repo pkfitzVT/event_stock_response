@@ -1,14 +1,17 @@
-```toml
 # pyproject.toml
 [tool.black]
 line-length = 88
-# any other Black settings you require
 
 [tool.isort]
 profile = "black"
-# inherits Black’s line-length and import formatting rules
 
 [tool.flake8]
 max-line-length = 88
-extend-ignore = E203, W503
-# E203 and W503 are ignored to match Black’s behavior
+extend-ignore = ["E203", "W503"]
+exclude = [
+  "catalog/migrations/",
+  "**/migrations/",
+  ".venv/",
+  "__pycache__/",
+  "*.pyc"
+]
