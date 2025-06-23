@@ -1,0 +1,13 @@
+{% block content %}
+  <h2>Step 2: Confirm Dates</h2>
+  <p>{{ resp.message }}</p>
+  <ul>
+    {% for d in resp.events %}
+      <li>{{ d }}</li>
+    {% endfor %}
+  </ul>
+  <form method="post">{% csrf_token %}
+    <button name="confirm" value="yes">Yes</button>
+    <button name="confirm" value="no">No</button>
+  </form>
+{% endblock %}
