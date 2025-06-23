@@ -1,0 +1,35 @@
+
+2. **Paste a minimal template** (you can flesh it out later):
+
+```django
+{% extends 'base.html' %}
+
+{% block title %}Analysis {{ post.id }}{% endblock %}
+
+{% block content %}
+  <h1>{{ post.title }}</h1>
+
+  <h3>Event description</h3>
+  <p>{{ post.prompt_text }}</p>
+
+  <h3>Dates</h3>
+  <ul>
+    {% for d in post.events %}
+      <li>{{ d }}</li>
+    {% empty %}
+      <li>No dates stored.</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Chosen stocks</h3>
+  <ul>
+    {% for t in post.stocks %}
+      <li>{{ t }}</li>
+    {% empty %}
+      <li>No tickers chosen.</li>
+    {% endfor %}
+  </ul>
+
+  <!-- link back to dashboard -->
+  <p><a href="{% url 'catalog:home' %}">Back to home</a></p>
+{% endblock %}

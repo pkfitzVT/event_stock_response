@@ -52,7 +52,7 @@ ROOT_URLCONF = "event_stock_response.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],  # global templates directory
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [

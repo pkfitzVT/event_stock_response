@@ -1,7 +1,8 @@
+# catalog/schemas.py
 from datetime import date
 from typing import List, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, Field, field_validator
 
 
 class TopicRequest(BaseModel):
@@ -13,9 +14,9 @@ class DatesResponse(BaseModel):
     events: List[date]
     message: str
 
-    @validator("events", pre=True, each_item=True)
-    def parse_date(cls, v):
-        return date.fromisoformat(v) if isinstance(v, str) else v
+    @field_validator("events", mode="before")
+    def parse_dates(cls, v):
+        return [date.fromisoformat(d) if isinstance(d, str) else d for d in v]
 
 
 class StockRequest(BaseModel):
@@ -23,13 +24,18 @@ class StockRequest(BaseModel):
     top_n: Optional[int]
 
 
+class StocksBasket(BaseModel):
+    positive: List[str] = Field(default_factory=list)
+    negative: List[str] = Field(default_factory=list)
+
+
 class StockResponse(BaseModel):
-    stocks: List[str]
+    stocks: StocksBasket
     message: str
 
 
 class AnalysisParams(BaseModel):
     title: str
     events: List[date]
-    stocks: List[str]
+    stocks: List[str]  # tickers stored here
     message: str
