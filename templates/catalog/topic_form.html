@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Step&nbsp;1: Choose Topic</h2>
+
+  <form action="{% url 'catalog:chat_flow' %}" method="post">
+    {% csrf_token %}
+    <div>
+      <label for="id_query">What event are you interested in?</label>
+      <input type="text"
+             name="query"
+             id="id_query"
+             placeholder="e.g. Apple iPhone launch"
+             required>
+    </div>
+
+    <button type="submit">Submit</button>
+  </form>
+{% endblock %}

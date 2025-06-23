@@ -1,8 +1,0 @@
-{% block content %}
-  <h2>Step 1: Choose Topic</h2>
-  <form method="post">{% csrf_token %}
-    <label for="id_query">What event are you interested in?</label>
-    <input type="text" name="query" id="id_query" required>
-    <button type="submit">Submit</button>
-  </form>
-{% endblock %}
