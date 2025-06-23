@@ -1,22 +1,41 @@
+# .pre-commit-config.yaml (project root)
 repos:
   - repo: https://github.com/psf/black
     rev: 23.7.0
     hooks:
       - id: black
         language_version: python3.10
-        # Black already defaults to 88 chars, but you can be explicit:
-        args: ["--line-length", "88"]
+        args:
+          - --line-length
+          - "88"
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
     hooks:
       - id: isort
-        args: ["--profile", "black", "--line-length", "88"]
+        language_version: python3.10
+        args:
+          - --profile=black
+          - --line-length=88
+
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v1.7.0
+    hooks:
+      - id: autopep8
+        name: autopep8 (fix spacing E301/E302)
+        language_version: python3.10
+        entry: autopep8
+        args:
+          - --select=E301,E302
+          - --in-place
+          - --aggressive
+          - --aggressive
 
   - repo: https://github.com/PyCQA/flake8
     rev: 6.0.0
     hooks:
       - id: flake8
+        language_version: python3.10
         args:
           - --max-line-length=88
           - --extend-ignore=E203,W503
