@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Event Analysis Results</h1>
+
+  <h2>Raw Price & Return Data</h2>
+  <table border="1" cellpadding="4" cellspacing="0">
+    <thead>
+      <tr>
+        {% for col in columns %}
+          <th>{{ col }}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in row_values %}
+        <tr>
+          {% for cell in row %}
+            <td>{{ cell }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h2>Mean Cumulative Return Heatmap</h2>
+  <div>
+    {{ plot_div|safe }}
+  </div>
+{% endblock %}
