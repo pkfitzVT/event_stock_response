@@ -1,11 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
-  <a href="{% url 'catalog:analysis_list' %}">Home</a> |
-  <a href="{% url 'catalog:chat_flow' %}">New Analysis</a>
+
 
   <h1>{{ post.title }}</h1>
+<form action="{% url 'catalog:vote' post.pk 'up' %}" method="post" style="display:inline">
+  {% csrf_token %}
+  <button type="submit"
+          {% if user_vote == 1 %}disabled{% endif %}>
+    👍 {{ upvotes }}
+  </button>
+</form>
 
-  {# Heatmap #}
+<form action="{% url 'catalog:vote' post.pk 'down' %}" method="post" style="display:inline">
+  {% csrf_token %}
+  <button type="submit"
+          {% if user_vote == -1 %}disabled{% endif %}>
+    👎 {{ downvotes }}
+  </button>
+</form>
+
+
+  {# Heatmap Visualization #}
   {% if plot_div %}
     <section>
       <h2>Mean Cumulative Return Heatmap</h2>
@@ -13,7 +28,7 @@
     </section>
   {% endif %}
 
-  {# HTML table #}
+  {# Mean Return Table #}
   {% if table_html %}
     <section>
       <h2>Mean Return Table</h2>
@@ -52,5 +67,15 @@
     {% endif %}
   </section>
 
-  <p><a href="{% url 'catalog:analysis_list' %}">Back to Your Analyses</a></p>
+  <section>
+    <h2>Voting</h2>
+    <form action="{% url 'catalog:vote' post.pk 'up' %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" {% if user_vote == 1 %}disabled{% endif %}>👍 {{ upvotes }}</button>
+    </form>
+    <form action="{% url 'catalog:vote' post.pk 'down' %}" method="post" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit" {% if user_vote == -1 %}disabled{% endif %}>👎 {{ downvotes }}</button>
+    </form>
+  </section>
 {% endblock %}

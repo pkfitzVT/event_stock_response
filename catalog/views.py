@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from openai import OpenAI
 
-from catalog.models import AnalysisPost
+from catalog.models import AnalysisPost, Vote
 from catalog.schemas import TopicRequest
 from catalog.utils import generate_dates, generate_stocks
 
@@ -252,3 +252,11 @@ def analysis_detail(request, pk):
         "catalog/analysis_detail.html",
         {"post": post, "plot_div": plot_div, "table_html": table_html},
     )
+
+
+def vote(request, pk, action):
+    post = get_object_or_404(AnalysisPost, pk=pk)
+    value = Vote.UPVOTE if action == "up" else Vote.DOWNVOTE
+    Vote.objects.filter(post=post, user=request.user).delete()
+    Vote.objects.create(post=post, user=request.user, value=value)
+    return redirect("catalog:analysis_detail", pk=pk)
