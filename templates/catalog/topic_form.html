@@ -1,19 +1,38 @@
-{% extends 'base.html' %}
-
+{% extends "base.html" %}
 {% block content %}
-  <h2>Step&nbsp;1: Choose Topic</h2>
 
-  <form action="{% url 'catalog:chat_flow' %}" method="post">
+  {# show any errors or info from Django’s messages framework #}
+  {% if messages %}
+    <ul class="messages" style="color: red; max-width:800px;">
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <h1>What event do you want to analyze?</h1>
+  <form method="post" action="{% url 'catalog:chat_flow' %}">
     {% csrf_token %}
-    <div>
-      <label for="id_query">What event are you interested in?</label>
-      <input type="text"
-             name="query"
-             id="id_query"
-             placeholder="e.g. Apple iPhone launch"
-             required>
-    </div>
+    <label for="query"><strong>Event Description</strong></label><br>
+    <textarea
+      id="query"
+      name="query"
+      rows="4"
+      required
+      style="width: 100%; max-width: 800px;"
+      placeholder="e.g. List all major U.S. military interventions in the Middle East since 1990."></textarea>
 
-    <button type="submit">Submit</button>
+    <p><em>Some ideas of events that often move markets:</em></p>
+    <ul style="max-width: 800px; font-size: 0.9em;">
+      <li>Geopolitical events (e.g. “Brexit vote,” “Gulf War start”)</li>
+      <li>Central bank decisions (e.g. “Fed rate hike June 2023”)</li>
+      <li>Natural disasters (e.g. “Hurricane Katrina landfall”)</li>
+      <li>Regulatory changes (e.g. “Enron bankruptcy filing”)</li>
+      <li>Major corporate actions (e.g. “Apple iPhone launch”)</li>
+    </ul>
+
+    <button type="submit" style="padding: 0.5em 1em; font-size: 1em;">
+      Find Similar Events
+    </button>
   </form>
 {% endblock %}

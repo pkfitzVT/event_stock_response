@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block content %}
+  <h1>Your Analyses</h1>
+  <ul>
+    {% for post in posts %}
+      <li>
+        <a href="{% url 'catalog:analysis_detail' post.pk %}">
+          {{ post.title }}
+        </a>
+        – {{ post.created_at|date:"Y-m-d H:i" }}
+        <br>
+        Dates: {{ post.events_data|length }},
+        Stocks: {{ post.stocks_data|length }},
+        Results entries: {{ post.results_data|length }}
+      </li>
+    {% empty %}
+      <li>No analyses saved yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}
