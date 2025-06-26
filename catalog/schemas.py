@@ -1,4 +1,3 @@
-# catalog/schemas.py
 from datetime import date
 from typing import List, Optional
 

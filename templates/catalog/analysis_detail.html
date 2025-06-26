@@ -1,35 +1,56 @@
-
-2. **Paste a minimal template** (you can flesh it out later):
-
-```django
-{% extends 'base.html' %}
-
-{% block title %}Analysis {{ post.id }}{% endblock %}
-
+{% extends "base.html" %}
 {% block content %}
+  <a href="{% url 'catalog:analysis_list' %}">Home</a> |
+  <a href="{% url 'catalog:chat_flow' %}">New Analysis</a>
+
   <h1>{{ post.title }}</h1>
 
-  <h3>Event description</h3>
-  <p>{{ post.prompt_text }}</p>
+  {# Heatmap #}
+  {% if plot_div %}
+    <section>
+      <h2>Mean Cumulative Return Heatmap</h2>
+      {{ plot_div|safe }}
+    </section>
+  {% endif %}
 
-  <h3>Dates</h3>
-  <ul>
-    {% for d in post.events %}
-      <li>{{ d }}</li>
-    {% empty %}
-      <li>No dates stored.</li>
-    {% endfor %}
-  </ul>
+  {# HTML table #}
+  {% if table_html %}
+    <section>
+      <h2>Mean Return Table</h2>
+      {{ table_html|safe }}
+    </section>
+  {% endif %}
 
-  <h3>Chosen stocks</h3>
-  <ul>
-    {% for t in post.stocks %}
-      <li>{{ t }}</li>
-    {% empty %}
-      <li>No tickers chosen.</li>
-    {% endfor %}
-  </ul>
+  <section>
+    <h2>Event Description</h2>
+    <p>{{ post.prompt_text }}</p>
+  </section>
 
-  <!-- link back to dashboard -->
-  <p><a href="{% url 'catalog:home' %}">Back to home</a></p>
+  <section>
+    <h2>Dates</h2>
+    {% if post.events_data %}
+      <ul>
+        {% for ev in post.events_data %}
+          <li><strong>{{ ev.date }}</strong> &ndash; {{ ev.description }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No dates stored.</p>
+    {% endif %}
+  </section>
+
+  <section>
+    <h2>Chosen Stocks</h2>
+    {% if post.stocks_data %}
+      <ul>
+        {% for s in post.stocks_data %}
+          <li><strong>{{ s.ticker }}</strong> &ndash; {{ s.name }} [{{ s.sentiment }}]</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p>No tickers chosen.</p>
+    {% endif %}
+  </section>
+
+  <p><a href="{% url 'catalog:analysis_list' %}">Back to Your Analyses</a></p>
 {% endblock %}

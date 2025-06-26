@@ -1,36 +1,26 @@
-{% extends 'base.html' %}
+<form method="post">
+  {% csrf_token %}
+  <h2>Which tickers do you want to include?</h2>
+  {% for stock in stocks_info %}
+    <label style="display:block; margin:8px 0;">
+      <input
+        type="checkbox"
+        name="stocks"
+        value="{{ stock.ticker }}"
+        checked
+      >
+      <strong>{{ stock.ticker }}</strong>
+      {% if stock.sentiment == "positive" %}
+        <span style="color:green;">↑Likely up</span>
+      {% else %}
+        <span style="color:red;">↓Likely down</span>
+      {% endif %}
+       – {{ stock.name }}
+       <small>(first trade: {{ stock.started }})</small>
+      <br>
+      <small style="color:#555;">{{ stock.description }}</small>
+    </label>
+  {% endfor %}
 
-{% block content %}
-  <h2>Step&nbsp;3: Choose Stocks</h2>
-
-  {% if suggested %}
-    <p><strong>Suggested by AI:</strong></p>
-    <ul>
-      <li><b>Positive ⬆</b>:
-          {% if suggested.stocks.positive %}
-            {{ suggested.stocks.positive|join:", " }}
-          {% else %}
-            <em>no suggestions</em>
-          {% endif %}
-      </li>
-      <li><b>Negative ⬇</b>:
-          {% if suggested.stocks.negative %}
-            {{ suggested.stocks.negative|join:", " }}
-          {% else %}
-            <em>no suggestions</em>
-          {% endif %}
-      </li>
-    </ul>
-    <p>You can accept these, edit, or enter your own list below.</p>
-  {% endif %}
-
-  <form action="{% url 'catalog:chat_flow' %}" method="post">
-    {% csrf_token %}
-    <label for="id_stocks">Stocks (comma-separated)</label>
-    <input type="text" name="stocks" id="id_stocks"
-           value="{{ suggested.stocks.positive|join:', ' }}">
-    &nbsp;Or choose top&nbsp;
-    <input type="number" name="top_n" min="1" max="6" style="width:3em;">
-    <button type="submit">Submit</button>
-  </form>
-{% endblock %}
+  <button type="submit">Fetch Price Data</button>
+</form>

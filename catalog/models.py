@@ -9,35 +9,38 @@ class AnalysisPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    # Storage for wizard state and results as JSON blobs
+    events_data = models.JSONField(default=list, blank=True)
+    stocks_data = models.JSONField(default=list, blank=True)
+    results_data = models.JSONField(default=dict, blank=True)
+
     def __str__(self):
         return self.title
 
 
 class EventDate(models.Model):
-    post = models.ForeignKey(
-        AnalysisPost, on_delete=models.CASCADE, related_name="dates"
-    )
-    event_date = models.DateField()
+    # Deprecated: using JSON storage in AnalysisPost
+    pass
 
-    def __str__(self):
-        return f"{self.post.title}: {self.event_date}"
+
+class SuggestedStock(models.Model):
+    # Deprecated: using JSON storage in AnalysisPost
+    pass
 
 
 class HorizonResult(models.Model):
-    post = models.ForeignKey(
-        AnalysisPost, on_delete=models.CASCADE, related_name="results"
-    )
-    horizon = models.CharField(max_length=10)  # e.g. "1D", "1W"
-    return_value = models.FloatField()
-
-    def __str__(self):
-        return f"{self.post.title} {self.horizon}: {self.return_value:.4f}"
+    # Deprecated: using JSON storage in AnalysisPost
+    pass
 
 
+# Optional: Remove Vote and Comment models if using JSON-only persistence
 class Vote(models.Model):
     UPVOTE = 1
     DOWNVOTE = -1
-    VALUE_CHOICES = ((UPVOTE, "Up"), (DOWNVOTE, "Down"))
+    VALUE_CHOICES = (
+        (UPVOTE, "Up"),
+        (DOWNVOTE, "Down"),
+    )
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="votes")
     post = models.ForeignKey(

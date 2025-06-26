@@ -1,13 +1,12 @@
-{% block content %}
-  <h2>Step 2: Confirm Dates</h2>
-  <p>{{ resp.message }}</p>
-  <ul>
-    {% for d in resp.events %}
-      <li>{{ d }}</li>
-    {% endfor %}
-  </ul>
-  <form method="post">{% csrf_token %}
-    <button name="confirm" value="yes">Yes</button>
-    <button name="confirm" value="no">No</button>
-  </form>
-{% endblock %}
+<form method="post">
+  {% csrf_token %}
+  <h2>Select the interventions you want to include</h2>
+  {% for ev in events %}
+    <label style="display:block; margin:0.5em 0;">
+      <input type="checkbox" name="events" value="{{ ev.date }}" checked>
+      <strong>{{ ev.date }}</strong> – {{ ev.description }}
+    </label>
+  {% endfor %}
+  <button name="confirm" value="yes">Continue</button>
+  <button name="confirm" value="no">Start Over</button>
+</form>
